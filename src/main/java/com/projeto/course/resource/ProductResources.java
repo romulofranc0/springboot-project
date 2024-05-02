@@ -11,22 +11,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.projeto.course.entities.Category;
 import com.projeto.course.entities.Product;
-import com.projeto.course.services.CategoryService;
+import com.projeto.course.services.ProductService;
 
 @RestController
-@RequestMapping(value = "/categories")
-public class CategoryResources {
+@RequestMapping(value = "/products")
+public class ProductResources {
 
     @Autowired
-    private CategoryService service;
+    private ProductService service;
 
     private Set<Product> products=new HashSet<>();
 
     @GetMapping
-    public ResponseEntity<List<Category>> findAll() {
-        List<Category> list = service.findAll();
+    public ResponseEntity<List<Product>> findAll() {
+        List<Product> list = service.findAll();
         return ResponseEntity.ok().body(list);
 
     }
@@ -36,8 +35,8 @@ public class CategoryResources {
     }
 
     @GetMapping(value="/{id}")
-    public ResponseEntity<Category> findById(@PathVariable Long id){
-        Category obj = service.findById(id);
+    public ResponseEntity<Product> findById(@PathVariable Long id){
+        Product obj = service.findById(id);
         return ResponseEntity.ok().body(obj);
     }
 
