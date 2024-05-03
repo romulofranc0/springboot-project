@@ -41,10 +41,10 @@ public class OrderItem implements Serializable{
     }
 
     @JsonIgnore
-    public Order getProduct(){
-        return id.getOrder();
+    public Product getProduct(){
+        return id.getProduct();
     }
-
+  
     public void setProduct(Product product){
         id.setProduct(product);
     }
