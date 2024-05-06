@@ -2,6 +2,7 @@ package com.projeto.course.resource;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.projeto.course.entities.User;
+import com.projeto.course.repositories.UserRepository;
 import com.projeto.course.services.UserService;
 
 
@@ -25,6 +27,9 @@ public class UserResources {
 
     @Autowired
     private UserService service;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public ResponseEntity<List<User>> findAll() {
@@ -54,8 +59,21 @@ public class UserResources {
     }
     
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User obj){
-        return ResponseEntity.ok().body(obj);
+    public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User updatedUser){
+        Optional<User> existingUser=userRepository.findById(id);    
+        if (existingUser.isPresent()) {
+            User userToUpdate=existingUser.get();
+            userToUpdate.setName(updatedUser.getName());
+            userToUpdate.setPassword(updatedUser.getPassword());
+            userToUpdate.setEmail(updatedUser.getEmail());
+            userToUpdate.setPhone(updatedUser.getPhone());
+            userRepository.save(userToUpdate);
+            return ResponseEntity.ok(userToUpdate);
+        }
+     else {
+        return ResponseEntity.notFound().build(); 
+    
     }
 
+}
 }
